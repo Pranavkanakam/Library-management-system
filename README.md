@@ -2,6 +2,18 @@
 
 This project is a interactive Library Management System written in C. It is designed to handle common library operations such as adding books, registering users, borrowing and returning books, managing requests, and tracking fines.
 
+## How to Compile
+
+```bash
+make
+```
+
+## How to Run
+
+```bash
+./proj
+```
+
 ## Project Overview
 
 The system runs in the terminal and provides a simple numbered menu for different library operations. It stores data using linked lists and saves that data into text files so the information is available again when the program is reopened.
@@ -75,14 +87,3 @@ The project uses text files for persistence.
 - `Admin.txt` - admin password file
 - `makefile` - build instructions
 
-## How to Compile
-
-```bash
-make
-```
-
-## How to Run
-
-```bash
-./proj
-```
