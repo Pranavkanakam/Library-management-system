@@ -1,0 +1,21 @@
+21|Mission Impossible|6|6
+1|The Alchemist|10|10
+2|To Kill a Mockingbird|12|12
+3|1984|15|15
+4|Pride and Prejudice|9|9
+5|The Great Gatsby|11|11
+6|Moby Dick|8|7
+7|War and Peace|7|6
+8|The Catcher in the Rye|10|10
+9|The Hobbit|14|14
+10|Harry Potter and the Sorcerers Stone|20|20
+11|The Book Thief|13|13
+12|The Kite Runner|12|12
+13|Life of Pi|11|11
+14|Sapiens A Brief History of Humankind|16|16
+15|Homo Deus A Brief History of Tomorrow|14|14
+16|The Diary of a Young Girl|9|9
+17|The Fault in Our Stars|10|10
+18|A Thousand Splendid Suns|12|12
+19|The Shining|8|8
+20|Dracula|7|7
