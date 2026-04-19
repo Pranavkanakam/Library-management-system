@@ -1,7 +1,8 @@
 CFLAGS=-Wall
+LDFLAGS=-lcrypt
 
 proj: main.o lib.o
-	gcc $^ -o $@
+	gcc $^ $(LDFLAGS) -o $@
 
 %.o: %.c lib.h
 	gcc $(CFLAGS) -c $<

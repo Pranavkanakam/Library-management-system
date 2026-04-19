@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
+#include <crypt.h>
 #include <ctype.h>
 #include <time.h>
 #include "lib.h"
@@ -32,7 +34,7 @@ int case_not_care(char *left,char *right){
 int check_admin_password(){
     FILE *fp;
     char password[100];
-    char admin_password[100];
+    char admin_hash[100];
 
     if(!read_line_input("Enter admin password: ",password,sizeof(password))){
         return 0;
@@ -44,16 +46,17 @@ int check_admin_password(){
         return 0;
     }
 
-    if(fgets(admin_password,sizeof(admin_password),fp)==NULL){
+    if(fgets(admin_hash,sizeof(admin_hash),fp)==NULL){
         fclose(fp);
         printf("Couldn't read admin password.\n");
         return 0;
     }
     fclose(fp);
 
-    admin_password[strcspn(admin_password,"\n")]='\0';
+    admin_hash[strcspn(admin_hash,"\n")]='\0';
 
-    if(strcmp(password,admin_password)==0){
+    char*password_hash=crypt(password,admin_hash);
+    if(password_hash && strcmp(admin_hash,password_hash)==0){
         return 1;
     }
 
