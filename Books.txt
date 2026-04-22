@@ -1,11 +1,10 @@
-21|Mission Impossible|6|6
 1|The Alchemist|10|10
 2|To Kill a Mockingbird|12|12
 3|1984|15|15
 4|Pride and Prejudice|9|9
 5|The Great Gatsby|11|11
-6|Moby Dick|8|7
-7|War and Peace|7|6
+6|Moby Dick|8|8
+7|War and Peace|7|7
 8|The Catcher in the Rye|10|10
 9|The Hobbit|14|14
 10|Harry Potter and the Sorcerers Stone|20|20
