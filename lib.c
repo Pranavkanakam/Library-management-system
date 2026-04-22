@@ -611,6 +611,7 @@ int delete_book(){
             return 0;
         }
         curr->available_copies-=copies;
+        curr->total_copies-=copies;
         printf("Updated number of available copies: %d\n",curr->available_copies);
         return 1;
     }
