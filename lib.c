@@ -428,6 +428,17 @@ User* find_user(int user_id){
     return NULL;
 }
 
+int user_name_exists(char name[]){
+    User *temp=user_head;
+    while(temp){
+        if(case_not_care(temp->name,name)){
+            return 1;
+        }
+        temp=temp->next;
+    }
+    return 0;
+}
+
 Transaction* find_active_transaction(int user_id,int book_id) {
     Transaction *temp=trans_head;
     while(temp) {
@@ -441,6 +452,11 @@ Transaction* find_active_transaction(int user_id,int book_id) {
 int add_user() {
     char name[100];
     if(!read_line_input("Enter user name: ", name, sizeof(name))){
+        return 0;
+    }
+
+    if(user_name_exists(name)){
+        printf("User name already exists.\n");
         return 0;
     }
 
@@ -673,13 +689,14 @@ int return_book(){
     if(!read_int_input("Enter user id: ",&user_id)){
         return 0;
     }
-    if(!read_line_input("Enter book title: ",title,sizeof(title))){
-        return 0;
-    }
 
     User*u=find_user(user_id);
     if(!u){
         printf("User not found.\n");
+        return 0;
+    }
+
+    if(!read_line_input("Enter book title: ",title,sizeof(title))){
         return 0;
     }
 
