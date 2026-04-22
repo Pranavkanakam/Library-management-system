@@ -27,7 +27,8 @@ int main(){
         printf("11.Display Books\n");
         printf("12.Display Transactions\n");
         printf("13.View Requests\n");
-        printf("14.Exit\n");
+        printf("14.Undo Last Operation\n");
+        printf("15.Exit\n");
         printf("Enter your choice with corresponding number.\n");
         if (!read_int_input(NULL, &choice)) {
             if (feof(stdin)) {
@@ -51,7 +52,8 @@ int main(){
             case 11: display_books(); break;
             case 12: display_transactions(); break;
             case 13: view_requests(); break;
-            case 14: 
+            case 14: undo_last_operation(); break;
+            case 15: 
                     save();
                 printf("Exiting...\n");
                 exit(0);
@@ -60,6 +62,6 @@ int main(){
                 printf("Invalid choice\n");
         }
     }
-        while(choice!=14);
+        while(choice!=15);
     return 0;
 }

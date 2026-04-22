@@ -46,9 +46,9 @@ int display_users();
 int display_books();
 int display_transactions();
 int view_requests();
+int undo_last_operation();
 int save();
 int load();
 void clear_all_data();
 int read_line_input(const char *prompt, char *buffer, size_t size);
 int read_int_input(const char *prompt, int *value);
-

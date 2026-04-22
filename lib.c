@@ -15,7 +15,217 @@ int next_bookid=1;
 int next_userid=1;
 int next_transaction_id=1;
 
+Book *undo_book_head=NULL;
+User *undo_user_head=NULL;
+Transaction *undo_trans_head=NULL;
+Request *undo_req_head=NULL;
+int undo_next_bookid=1;
+int undo_next_userid=1;
+int undo_next_transaction_id=1;
+int undo_available=0;
+
 int read_line_input(const char *prompt,char *buffer,size_t size);
+
+void free_book_list(Book *head){
+    while(head){
+        Book *temp=head;
+        head=head->next;
+        free(temp);
+    }
+}
+
+void free_user_list(User *head){
+    while(head){
+        User *temp=head;
+        head=head->next;
+        free(temp);
+    }
+}
+
+void free_transaction_list(Transaction *head){
+    while(head){
+        Transaction *temp=head;
+        head=head->next;
+        free(temp);
+    }
+}
+
+void free_request_list(Request *head){
+    while(head){
+        Request *temp=head;
+        head=head->next;
+        free(temp);
+    }
+}
+
+Book *clone_books(Book *ori){
+    Book *head=NULL;
+    Book *tail=NULL;
+
+    while(ori){
+        Book *node=malloc(sizeof(Book));
+        if(!node){
+            free_book_list(head);
+            return NULL;
+        }
+
+        *node=*ori;
+        node->next=NULL;
+
+        if(!head){
+            head=node;
+        }
+        else{
+            tail->next=node;
+        }
+        tail=node;
+        ori=ori->next;
+    }
+
+    return head;
+}
+
+User *clone_users(User *src){
+    User *head=NULL;
+    User *tail=NULL;
+
+    while(src){
+        User *node=malloc(sizeof(User));
+        if(!node){
+            free_user_list(head);
+            return NULL;
+        }
+
+        *node=*src;
+        node->next=NULL;
+
+        if(!head){
+            head=node;
+        }
+        else{
+            tail->next=node;
+        }
+        tail=node;
+        src=src->next;
+    }
+
+    return head;
+}
+
+Transaction *clone_transactions(Transaction *src){
+    Transaction *head=NULL;
+    Transaction *tail=NULL;
+
+    while(src){
+        Transaction *node=malloc(sizeof(Transaction));
+        if(!node){
+            free_transaction_list(head);
+            return NULL;
+        }
+
+        *node=*src;
+        node->next=NULL;
+
+        if(!head){
+            head=node;
+        }
+        else{
+            tail->next=node;
+        }
+        tail=node;
+        src=src->next;
+    }
+
+    return head;
+}
+
+Request *clone_requests(Request *src){
+    Request *head=NULL;
+    Request *tail=NULL;
+
+    while(src){
+        Request *node=malloc(sizeof(Request));
+        if(!node){
+            free_request_list(head);
+            return NULL;
+        }
+
+        *node=*src;
+        node->next=NULL;
+
+        if(!head){
+            head=node;
+        }
+        else{
+            tail->next=node;
+        }
+        tail=node;
+        src=src->next;
+    }
+
+    return head;
+}
+
+int snapshot_for_undo(){
+    Book *books=clone_books(book_head);
+    User *users=clone_users(user_head);
+    Transaction *trans=clone_transactions(trans_head);
+    Request *reqs=clone_requests(req_head);
+
+    if((book_head && !books) || (user_head && !users) ||
+       (trans_head && !trans) || (req_head && !reqs)){
+        free_book_list(books);
+        free_user_list(users);
+        free_transaction_list(trans);
+        free_request_list(reqs);
+        printf("Undo snapshot failed.\n");
+        return 0;
+    }
+
+    free_book_list(undo_book_head);
+    free_user_list(undo_user_head);
+    free_transaction_list(undo_trans_head);
+    free_request_list(undo_req_head);
+
+    undo_book_head=books;
+    undo_user_head=users;
+    undo_trans_head=trans;
+    undo_req_head=reqs;
+
+    undo_next_bookid=next_bookid;
+    undo_next_userid=next_userid;
+    undo_next_transaction_id=next_transaction_id;
+    undo_available=1;
+
+    return 1;
+}
+
+int undo_last_operation(){
+    if(!undo_available){
+        printf("Nothing to undo.\n");
+        return 0;
+    }
+
+    clear_all_data();
+
+    book_head=undo_book_head;
+    user_head=undo_user_head;
+    trans_head=undo_trans_head;
+    req_head=undo_req_head;
+
+    next_bookid=undo_next_bookid;
+    next_userid=undo_next_userid;
+    next_transaction_id=undo_next_transaction_id;
+
+    undo_book_head=NULL;
+    undo_user_head=NULL;
+    undo_trans_head=NULL;
+    undo_req_head=NULL;
+    undo_available=0;
+
+    printf("Last operation undone successfully.\n");
+    return 1;
+}
 
 int case_not_care(char *left,char *right){
     while(*left && *right){
@@ -234,7 +444,15 @@ int add_user() {
         return 0;
     }
 
+    if(!snapshot_for_undo()){
+        return 0;
+    }
+
     User *new_user=(User*)malloc(sizeof(User));
+    if(!new_user){
+        printf("Memory allocation failed.\n");
+        return 0;
+    }
 
     new_user->user_id=next_userid++;
     new_user->fine=0;
@@ -274,6 +492,9 @@ int add_book(){
             printf("Nothing added\n");
             return 0;
         }
+        if(!snapshot_for_undo()){
+            return 0;
+        }
         b->total_copies+=extra;
         b->available_copies+=extra;
         printf("Copies updated successfully.\n");
@@ -289,7 +510,15 @@ int add_book(){
         return 0;
     }
 
+    if(!snapshot_for_undo()){
+        return 0;
+    }
+
     Book *newb=(Book*)malloc(sizeof(Book));
+    if(!newb){
+        printf("Memory allocation failed.\n");
+        return 0;
+    }
     newb->book_id=next_bookid++;
     strcpy(newb->title, title);
     newb->total_copies=copies;
@@ -341,6 +570,9 @@ int delete_book(){
             printf("Book cannot be deleted as already some copies have been issued.\n");
             return 0;
         }
+        if(!snapshot_for_undo()){
+            return 0;
+        }
         if(prev==NULL){
             book_head=curr->next;
         }
@@ -357,6 +589,9 @@ int delete_book(){
 
         if(copies >= curr->available_copies || copies<=0){
             printf("Invalid number\n");
+            return 0;
+        }
+        if(!snapshot_for_undo()){
             return 0;
         }
         curr->available_copies-=copies;
@@ -400,7 +635,15 @@ int borrow_book(){
         return 0;
     }
 
+    if(!snapshot_for_undo()){
+        return 0;
+    }
+
     Transaction *t=(Transaction*)malloc(sizeof(Transaction));
+    if(!t){
+        printf("Memory allocation failed.\n");
+        return 0;
+    }
     
     now=time(NULL);
 
@@ -450,6 +693,10 @@ int return_book(){
 
     if(!t){
         printf("No active issue record found for this book and user.\n");
+        return 0;
+    }
+
+    if(!snapshot_for_undo()){
         return 0;
     }
 
@@ -648,7 +895,15 @@ int request_book(){
         printf("Book does not exist in library. Your request is added.\n");
     }
 
+    if(!snapshot_for_undo()){
+        return 0;
+    }
+
     r=(Request*)malloc(sizeof(Request));
+    if(!r){
+        printf("Memory allocation failed.\n");
+        return 0;
+    }
 
     r->user_id=user_id;
     strcpy(r->title,title);
@@ -924,6 +1179,10 @@ int pay_fine(){
     }
     if(amount>u->fine){
         printf("Amount cannot be more than fine.Your fine is Rs %d\n",u->fine);
+        return 0;
+    }
+
+    if(!snapshot_for_undo()){
         return 0;
     }
 
