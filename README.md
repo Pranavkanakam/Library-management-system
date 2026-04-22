@@ -1,6 +1,6 @@
 # Library Management System
 
-This project is an interactive Library Management System written in C. It is designed to handle common library operations such as adding books, registering users, borrowing and returning books, managing requests, tracking fines, and undoing the most recent change.
+This project is an interactive Library Management System written in C. It is designed to handle common library operations such as adding books, registering users, borrowing and returning books, managing requests, tracking fines, and undoing the most recent change. Some demo datasets are already added.
 
 ## How to Compile
 
