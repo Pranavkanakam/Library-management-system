@@ -7,6 +7,17 @@ This project is an interactive Library Management System written in C. It is des
 ```bash
 make
 ```
+## Requirements
+
+- `gcc`
+- `make`
+- `libcrypt` development package
+
+On Ubuntu/Debian:
+
+```bash
+sudo apt install build-essential libcrypt-dev
+```
 
 ## How to Run
 
