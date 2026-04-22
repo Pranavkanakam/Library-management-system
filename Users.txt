@@ -1,0 +1,4 @@
+1|Aarav|0
+2|Meera|20
+3|Rahul|0
+4|Sneha|0
